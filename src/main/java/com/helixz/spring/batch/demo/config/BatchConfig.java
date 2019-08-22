@@ -27,6 +27,8 @@ import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
 
+import static com.helixz.spring.batch.demo.constant.BatchJobConstant.*;
+
 /**
  * @author Chamith
  */
@@ -49,7 +51,7 @@ public class BatchConfig {
     @Bean
     public FlatFileItemReader<Order> reader() {
         return new FlatFileItemReaderBuilder<Order>()
-                .name("ordersItemReader")
+                .name(ORDER_ITEM_READER)
                 .resource(new ClassPathResource("csv/orders.csv"))
                 .linesToSkip(1)
                 .delimited()
@@ -90,18 +92,18 @@ public class BatchConfig {
     }
 
     @Bean
-    public Job orderProcessJob(CustomJobListener listener, Step step1) {
-        return jobBuilderFactory.get("orderProcessJob")
+    public Job job(CustomJobListener listener, Step step) {
+        return jobBuilderFactory.get(ORDER_PROCESS_JOB)
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
-                .flow(step1)
+                .flow(step)
                 .end()
                 .build();
     }
 
     @Bean
     public Step step(JdbcBatchItemWriter<Order> writer) {
-        return stepBuilderFactory.get("step")
+        return stepBuilderFactory.get(BATCH_STEP)
                 .<Order, Order> chunk(5)
                 .reader(reader())
                 .processor(processor())
