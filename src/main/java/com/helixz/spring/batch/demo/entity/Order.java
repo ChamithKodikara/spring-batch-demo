@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author Chamith
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(catalog = "batch_demo_db", name = "orders")
-public class Orders {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +26,8 @@ public class Orders {
     private LocalDateTime orderDate;
 
     private String note;
+
+    @Transient
+    private Date tempOrderDate;
 
 }
