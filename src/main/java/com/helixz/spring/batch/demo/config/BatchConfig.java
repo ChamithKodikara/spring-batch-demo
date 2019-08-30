@@ -33,7 +33,6 @@ import static com.helixz.spring.batch.demo.constant.BatchJobConstant.*;
  * @author Chamith
  */
 @Configuration
-@EnableBatchProcessing
 public class BatchConfig {
 
     @Autowired
