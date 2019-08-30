@@ -91,6 +91,16 @@ public class BatchConfig {
     }
 
     @Bean
+    public Step step(JdbcBatchItemWriter<Order> writer) {
+        return stepBuilderFactory.get(BATCH_STEP)
+                .<Order, Order> chunk(5)
+                .reader(reader())
+                .processor(processor())
+                .writer(writer)
+                .build();
+    }
+
+    @Bean
     public Job job(CustomJobListener listener, Step step) {
         return jobBuilderFactory.get(ORDER_PROCESS_JOB)
                 .incrementer(new RunIdIncrementer())
@@ -100,13 +110,5 @@ public class BatchConfig {
                 .build();
     }
 
-    @Bean
-    public Step step(JdbcBatchItemWriter<Order> writer) {
-        return stepBuilderFactory.get(BATCH_STEP)
-                .<Order, Order> chunk(5)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer)
-                .build();
-    }
+
 }
